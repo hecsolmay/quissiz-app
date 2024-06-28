@@ -11,7 +11,7 @@
   "author": "",
   "license": "ISC",
   "description": "Esta aplicación es una plataforma de quiz en la que los usuarios pueden realizar cuestionarios de forma sencilla",
-  "packageManager": "npm@10.7.0",
+  "packageManager": "yarn@1.22.22",
   "workspaces": [
     "apps/*"
   ],
