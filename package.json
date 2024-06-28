@@ -1,0 +1,30 @@
+{
+  "name": "quissiz",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "turbo dev",
+    "build": "turbo build",
+    "start": "npm run start --workspace=apps/server"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Esta aplicación es una plataforma de quiz en la que los usuarios pueden realizar cuestionarios de forma sencilla",
+  "packageManager": "npm@10.7.0",
+  "workspaces": [
+    "apps/*"
+  ],
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "eslint": "^8.57.0",
+    "eslint-config-standard-with-typescript": "^43.0.1",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.2.0",
+    "eslint-plugin-react": "^7.34.3",
+    "globals": "^15.6.0",
+    "turbo": "^2.0.5",
+    "typescript": "^5.5.2"
+  }
+}
