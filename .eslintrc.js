@@ -24,6 +24,10 @@ module.exports = {
     'no-trailing-spaces': 'error',
     'eol-last': ['error', 'always'],
     'object-curly-spacing': ['error', 'always'],
-    'array-bracket-spacing': ['error', 'never']
+    'array-bracket-spacing': ['error', 'never'],
+    '@typescript-eslint/explicit-function-return-type': 'off',
+    '@typescript-eslint/no-misused-promises': 'off',
+    "@typescript-eslint/no-extraneous-class": "off",
+    "@typescript-eslint/return-await": "off"
   }
 }
