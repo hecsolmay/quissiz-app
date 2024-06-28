@@ -1,8 +1,9 @@
-import express from 'express'
-import { PORT } from './config'
 import cors from 'cors'
+import express from 'express'
 import morgan from 'morgan'
+import { PORT } from './config'
 import connect from './database/database'
+import testsRouter from './routes/tests'
 
 const app = express()
 
@@ -19,6 +20,8 @@ async function main () {
   app.get('/api', (req, res) => {
     res.json({ message: 'Hello World' })
   })
+
+  app.use('/api/tests', testsRouter)
 
   app.listen(PORT, () => {
     console.log(`Server is running on port ${PORT}`)
