@@ -1,7 +1,9 @@
+import { API_URL } from './config'
+
 export default function App () {
   const handleClick = async () => {
     try {
-      const response = await fetch('/api')
+      const response = await fetch(`${API_URL}/api`)
       if (!response.ok) {
         throw new Error('Network response was not ok')
       }
