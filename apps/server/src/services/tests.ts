@@ -1,5 +1,5 @@
-import Test from '@/models/test'
-import { type Test as TestSchema } from '@/validators/tests'
+import Test from '../models/test'
+import { type Test as TestSchema } from '../validators/tests'
 
 export class TestsService {
   static async findAllTests () {

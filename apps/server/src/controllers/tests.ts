@@ -1,7 +1,7 @@
-import { TestsService } from '@/services/tests'
-import { handleError } from '@/utils/errors'
-import { testSchema } from '@/validators/tests'
 import type { Request, Response } from 'express'
+import { TestsService } from '../services/tests'
+import { handleError } from '../utils/errors'
+import { testSchema } from '../validators/tests'
 
 export async function getTests (req: Request, res: Response) {
   try {
