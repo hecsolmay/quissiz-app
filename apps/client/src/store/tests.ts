@@ -1,4 +1,5 @@
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 import { APP_STATUS, AppStatus, SECONDS_FOR_QUESTION } from '../constants'
 import { getRandomQuestions } from '../libs/utils'
 import { getTests } from '../services/tests'
@@ -10,6 +11,7 @@ interface Actions {
   setSelectedTest: (testId: string) => void
   startGame: () => void
   changeAppStatus: (appStatus: AppStatus) => void
+  closeGame: () => void
 }
 
 interface State {
@@ -32,79 +34,96 @@ const initialState: State = {
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
-export const useTestsStore = create<StateActions>((set, get) => ({
-  ...initialState,
-  fetchTests: async () => {
-    if (get().tests.length > 0) {
-      set({ appStatus: APP_STATUS.LOBBY })
-      return
-    }
+export const useTestsStore = create<StateActions>()(
+  persist(
+    (set, get) => ({
+      ...initialState,
+      fetchTests: async () => {
+        if (get().tests.length > 0) {
+          set({ appStatus: APP_STATUS.LOBBY })
+          return
+        }
 
-    if (get().appStatus === APP_STATUS.LOADING) {
-      return
-    }
+        if (get().appStatus === APP_STATUS.LOADING) {
+          return
+        }
 
-    try {
-      set({ appStatus: APP_STATUS.LOADING })
+        try {
+          set({ appStatus: APP_STATUS.LOADING })
 
-      const data = await getTests()
-      set({
-        appStatus: APP_STATUS.LOBBY,
-        tests: data.data
-      })
-    } catch (error) {
-      set({ appStatus: APP_STATUS.ERROR })
-      console.error(error)
-    }
-  },
-  refreshTests: async () => {
-    try {
-      if (get().appStatus === APP_STATUS.LOADING) {
-        return
+          const data = await getTests()
+          set({
+            appStatus: APP_STATUS.LOBBY,
+            tests: data.data
+          })
+        } catch (error) {
+          set({ appStatus: APP_STATUS.ERROR })
+          console.error(error)
+        }
+      },
+      refreshTests: async () => {
+        try {
+          if (get().appStatus === APP_STATUS.LOADING) {
+            return
+          }
+          set({ appStatus: APP_STATUS.LOADING })
+          await delay(3000)
+          const data = await getTests()
+          set({
+            appStatus: APP_STATUS.LOBBY,
+            tests: data.data
+          })
+        } catch (error) {
+          console.error(error)
+          set({ appStatus: APP_STATUS.ERROR })
+        }
+      },
+      changeAppStatus: (appStatus: AppStatus) => {
+        set({ appStatus })
+      },
+      setSelectedTest: (testId: string) => {
+        const { tests } = get()
+
+        const foundTest = tests.find(test => test.id === testId)
+
+        if (foundTest === undefined) {
+          return
+        }
+
+        set({
+          selectedTest: foundTest,
+          appStatus: APP_STATUS.READY
+        })
+      },
+      startGame: () => {
+        const { selectedTest } = get()
+
+        if (selectedTest === null) {
+          return
+        }
+
+        const { questions } = selectedTest
+
+        const mappedQuestions = getRandomQuestions(questions)
+        set({
+          appStatus: APP_STATUS.GAME_STARTED,
+          questions: mappedQuestions,
+          secondsLeft: SECONDS_FOR_QUESTION
+        })
+      },
+      closeGame: () => {
+        const { selectedTest } = get()
+
+        if (selectedTest === null) {
+          set({ appStatus: APP_STATUS.LOBBY })
+          return
+        }
+
+        set({ appStatus: APP_STATUS.LOBBY, selectedTest: null })
       }
-      set({ appStatus: APP_STATUS.LOADING })
-      await delay(3000)
-      const data = await getTests()
-      set({
-        appStatus: APP_STATUS.LOBBY,
-        tests: data.data
-      })
-    } catch (error) {
-      console.error(error)
-      set({ appStatus: APP_STATUS.ERROR })
+    }),
+    {
+      name: 'tests'
     }
-  },
-  changeAppStatus: (appStatus: AppStatus) => {
-    set({ appStatus })
-  },
-  setSelectedTest: (testId: string) => {
-    const { tests } = get()
-
-    const foundTest = tests.find(test => test.id === testId)
-
-    if (foundTest === undefined) {
-      return
-    }
-
-    set({
-      selectedTest: foundTest,
-      appStatus: APP_STATUS.READY
-    })
-  },
-  startGame: () => {
-    const { selectedTest } = get()
-
-    if (selectedTest === null) {
-      return
-    }
-
-    const { questions } = selectedTest
-
-    const mappedQuestions = getRandomQuestions(questions)
-    set({
-      appStatus: APP_STATUS.GAME_STARTED,
-      questions: mappedQuestions,
-      secondsLeft: SECONDS_FOR_QUESTION
-    })
-  }
-}))
+  )
+)
