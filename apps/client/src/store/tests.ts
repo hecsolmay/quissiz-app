@@ -4,6 +4,7 @@ import { APP_STATUS, AppStatus, SECONDS_FOR_QUESTION } from '../constants'
 import { getRandomQuestions } from '../libs/utils'
 import { getTests } from '../services/tests'
 import { QuestionWithAnswer, Test as TestType } from '../types/tests'
+import confetti from 'canvas-confetti'
 
 interface Actions {
   fetchTests: () => Promise<void>
@@ -12,6 +13,7 @@ interface Actions {
   startGame: () => void
   changeAppStatus: (appStatus: AppStatus) => void
   closeGame: () => void
+  saveAnswer: (questionId: string, answer: number) => void
 }
 
 interface State {
@@ -20,6 +22,7 @@ interface State {
   selectedTest: TestType | null
   questions: QuestionWithAnswer[]
   secondsLeft: number
+  currentQuestionIndex: number
 }
 
 type StateActions = Actions & State
@@ -29,7 +32,8 @@ const initialState: State = {
   tests: [],
   selectedTest: null,
   questions: [],
-  secondsLeft: 0
+  secondsLeft: 0,
+  currentQuestionIndex: 0
 }
 
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
@@ -120,6 +124,28 @@ export const useTestsStore = create<StateActions>()(
         }
 
         set({ appStatus: APP_STATUS.LOBBY, selectedTest: null })
+      },
+      saveAnswer: (questionId: string, answer: number) => {
+        const { questions } = get()
+        const newQuestions = structuredClone(questions)
+
+        const indexQuestion = newQuestions.findIndex(
+          question => question.id === questionId
+        )
+        const questionInfo = newQuestions[indexQuestion]
+
+        const isCorrectAnswer = answer === questionInfo.correctIndex
+
+        if (isCorrectAnswer) confetti()
+
+        newQuestions[indexQuestion] = {
+          ...questionInfo,
+          isCorrectAnswer,
+          userSelectedOption: answer,
+          isUserAlreadyAnswered: true
+        }
+
+        set({ questions: newQuestions }, false)
       }
     }),
     {
