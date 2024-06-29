@@ -9,7 +9,8 @@ export function getRandomQuestions (questions: Question[], max = MAX_QUANTITY_OF
     ...question,
     userSelectedOption: null,
     isCorrectAnswer: false,
-    timeAnswered: 0
+    timeAnswered: 0,
+    isUserAlreadyAnswered: false
   }))
   return mappedQuestions
 }

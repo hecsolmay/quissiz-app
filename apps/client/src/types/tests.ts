@@ -22,4 +22,5 @@ export interface QuestionWithAnswer extends Question {
   userSelectedOption: number | null
   isCorrectAnswer: boolean
   timeAnswered: number
+  isUserAlreadyAnswered: boolean
 }
