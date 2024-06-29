@@ -6,7 +6,8 @@
     "dev": "nodemon --watch src --ext ts --ignore src/**/*.spec.ts --exec \"ts-node -r tsconfig-paths/register ./src/index.ts\"",
     "build": "tsc --project tsconfig.json && tsc-alias -p tsconfig.json",
     "start": "ts-node -r tsconfig-paths/register ./src/index.ts",
-    "vercel-build": "echo 'no build needed'"
+    "vercel-build": "echo 'no build needed'",
+    "db:seed": "ts-node -r tsconfig-paths/register ./src/database/seed.ts"
   },
   "keywords": [],
   "author": "",
