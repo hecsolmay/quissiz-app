@@ -1,22 +1,28 @@
-import { API_URL } from './config'
+import Background from './components/background'
+import Error from './components/error'
+import { GameOver, Game } from './components/game'
+import Hero from './components/hero'
+import Loading from './components/loading'
+import Lobby from './components/lobby'
+import Ready from './components/ready'
+import { APP_STATUS } from './constants'
+import { useTestsStore } from './store/tests'
 
 export default function App () {
-  const handleClick = async () => {
-    try {
-      const response = await fetch(`${API_URL}`)
-      if (!response.ok) {
-        throw new Error('Network response was not ok')
-      }
+  const appStatus = useTestsStore(state => state.appStatus)
 
-      const data = await response.json()
-      console.log(data)
-    } catch (error) {
-      console.error(error)
-    }
-  }
   return (
-    <div>
-      <button onClick={handleClick}>Click me</button>
-    </div>
+    <>
+      <Background />
+      <main className='mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8'>
+        {appStatus === APP_STATUS.INITIAL && <Hero />}
+        {appStatus === APP_STATUS.LOADING && <Loading />}
+        {appStatus === APP_STATUS.LOBBY && <Lobby />}
+        {appStatus === APP_STATUS.READY && <Ready />}
+        {appStatus === APP_STATUS.GAME_STARTED && <Game />}
+        {appStatus === APP_STATUS.GAME_OVER && <GameOver />}
+        {appStatus === APP_STATUS.ERROR && <Error />}
+      </main>
+    </>
   )
 }
