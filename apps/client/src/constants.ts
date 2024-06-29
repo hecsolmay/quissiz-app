@@ -9,3 +9,6 @@ export const APP_STATUS = {
 }
 
 export type AppStatus = typeof APP_STATUS[keyof typeof APP_STATUS]
+
+export const SECONDS_FOR_QUESTION = 15
+export const MAX_QUANTITY_OF_QUESTIONS = 10

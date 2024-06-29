@@ -17,3 +17,9 @@ export interface TestResponse {
   message: string
   data: Test[]
 }
+
+export interface QuestionWithAnswer extends Question {
+  userSelectedOption: number | null
+  isCorrectAnswer: boolean
+  timeAnswered: number
+}
