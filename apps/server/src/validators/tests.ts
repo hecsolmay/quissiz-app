@@ -20,7 +20,7 @@ export const questionSchema = z
       })
       .trim()
       .min(4, MESSAGES.QUESTION_MIN_LENGTH),
-    options: z.array(z.string().trim().min(4, MESSAGES.OPTION_MIN_LENGTH)),
+    options: z.array(z.string().trim().min(1, MESSAGES.OPTION_MIN_LENGTH)),
     correctIndex: z.number().int().nonnegative()
   })
   .refine(val => {
