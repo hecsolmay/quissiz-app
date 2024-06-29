@@ -19,7 +19,7 @@ export interface TestResponse {
 }
 
 export interface QuestionWithAnswer extends Question {
-  userSelectedOption: number | null
+  userSelectedOption: number
   isCorrectAnswer: boolean
   timeAnswered: number
   isUserAlreadyAnswered: boolean

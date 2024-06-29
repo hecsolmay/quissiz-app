@@ -7,7 +7,7 @@ export function getRandomQuestions (questions: Question[], max = MAX_QUANTITY_OF
     .slice(0, max)
   const mappedQuestions = randomQuestions.map(question => ({
     ...question,
-    userSelectedOption: null,
+    userSelectedOption: -1,
     isCorrectAnswer: false,
     timeAnswered: 0,
     isUserAlreadyAnswered: false
