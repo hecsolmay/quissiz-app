@@ -14,6 +14,11 @@ interface Actions {
   changeAppStatus: (appStatus: AppStatus) => void
   closeGame: () => void
   saveAnswer: (questionId: string, answer: number) => void
+  reduceSecondsLeft: (time?: number) => void
+  goToNextQuestion: () => void
+  resetGame: () => void
+  changeCurrentQuestion: (questionIndex: number) => void
+  goToPreviousQuestion: () => void
 }
 
 interface State {
@@ -22,6 +27,7 @@ interface State {
   selectedTest: TestType | null
   questions: QuestionWithAnswer[]
   secondsLeft: number
+  initialSeconds: number
   currentQuestionIndex: number
 }
 
@@ -29,6 +35,7 @@ type StateActions = Actions & State
 
 const initialState: State = {
   appStatus: APP_STATUS.INITIAL,
+  initialSeconds: SECONDS_FOR_QUESTION,
   tests: [],
   selectedTest: null,
   questions: [],
@@ -112,7 +119,8 @@ export const useTestsStore = create<StateActions>()(
         set({
           appStatus: APP_STATUS.GAME_STARTED,
           questions: mappedQuestions,
-          secondsLeft: SECONDS_FOR_QUESTION
+          secondsLeft: get().initialSeconds,
+          currentQuestionIndex: 0
         })
       },
       closeGame: () => {
@@ -126,7 +134,7 @@ export const useTestsStore = create<StateActions>()(
         set({ appStatus: APP_STATUS.LOBBY, selectedTest: null })
       },
       saveAnswer: (questionId: string, answer: number) => {
-        const { questions } = get()
+        const { questions, initialSeconds, secondsLeft } = get()
         const newQuestions = structuredClone(questions)
 
         const indexQuestion = newQuestions.findIndex(
@@ -138,14 +146,71 @@ export const useTestsStore = create<StateActions>()(
 
         if (isCorrectAnswer) confetti()
 
+        const timeAnswered = initialSeconds - secondsLeft
+
         newQuestions[indexQuestion] = {
           ...questionInfo,
           isCorrectAnswer,
           userSelectedOption: answer,
-          isUserAlreadyAnswered: true
+          isUserAlreadyAnswered: true,
+          timeAnswered
         }
 
         set({ questions: newQuestions }, false)
+      },
+      reduceSecondsLeft: (time = 1) => {
+        const { secondsLeft, currentQuestionIndex, questions, initialSeconds } =
+          get()
+        const nextSecondsLeft = secondsLeft - time
+
+        if (nextSecondsLeft > 0) {
+          set({ secondsLeft: nextSecondsLeft })
+          return
+        }
+
+        const questionInfo = questions[currentQuestionIndex]
+        const newQuestions = structuredClone(questions)
+        newQuestions[currentQuestionIndex] = {
+          ...questionInfo,
+          isCorrectAnswer: false,
+          userSelectedOption: -1,
+          isUserAlreadyAnswered: true,
+          timeAnswered: initialSeconds
+        }
+
+        set({
+          secondsLeft: 0,
+          questions: newQuestions
+        })
+      },
+      goToNextQuestion: () => {
+        const { currentQuestionIndex, questions, initialSeconds } = get()
+
+        if (currentQuestionIndex === questions.length - 1) {
+          return
+        }
+
+        set({
+          currentQuestionIndex: currentQuestionIndex + 1,
+          secondsLeft: initialSeconds
+        })
+      },
+      goToPreviousQuestion: () => {
+        const { currentQuestionIndex } = get()
+
+        if (currentQuestionIndex === 0) {
+          return
+        }
+
+        set({ currentQuestionIndex: currentQuestionIndex - 1 })
+      },
+      resetGame: () => {
+        set({
+          appStatus: APP_STATUS.READY
+        })
+      },
+      changeCurrentQuestion: (questionIndex: number) => {
+        set({ currentQuestionIndex: questionIndex })
       }
     }),
     {
