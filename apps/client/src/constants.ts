@@ -5,7 +5,8 @@ export const APP_STATUS = {
   READY: 'READY',
   ERROR: 'ERROR',
   GAME_STARTED: 'GAME_STARTED',
-  GAME_OVER: 'GAME_OVER'
+  GAME_OVER: 'GAME_OVER',
+  GAME_RESULTS: 'GAME_RESULTS'
 }
 
 export type AppStatus = typeof APP_STATUS[keyof typeof APP_STATUS]
