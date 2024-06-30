@@ -3,6 +3,8 @@ import { cn } from '../libs/cn'
 import { useTestsStore } from '../store/tests'
 import { ArrowLeft } from './icons/arrow'
 import ReloadIcon from './icons/reload'
+import XMark from './icons/x-mark'
+import Timer from './timer'
 
 interface ActionContainerProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -24,11 +26,51 @@ export function LobbyActions () {
 
   return (
     <ActionContainer>
-      <button onClick={() => changeAppStatus(APP_STATUS.INITIAL)}>
+      <button
+        title='regresar al inicio'
+        onClick={() => changeAppStatus(APP_STATUS.INITIAL)}
+      >
         <ArrowLeft className='size-8 transition-colors duration-200 hover:text-slate-500' />
       </button>
-      <button onClick={refreshTests}>
+      <button title='recargar tests' onClick={refreshTests}>
         <ReloadIcon className='size-8 transition-colors duration-200 hover:text-slate-500' />
+      </button>
+    </ActionContainer>
+  )
+}
+
+export function GameActions () {
+  const appStatus = useTestsStore(state => state.appStatus)
+  const changeAppStatus = useTestsStore(state => state.changeAppStatus)
+
+  if (appStatus === APP_STATUS.GAME_STARTED) {
+    return (
+      <ActionContainer className='fixed top-4 justify-end'>
+        <Timer />
+      </ActionContainer>
+    )
+  }
+
+  if (appStatus === APP_STATUS.GAME_RESULTS) {
+    return (
+      <ActionContainer>
+        <button
+          title='regresar al lobby'
+          onClick={() => changeAppStatus(APP_STATUS.LOBBY)}
+        >
+          <XMark className='size-8 transition-colors duration-200 hover:text-slate-500' />
+        </button>
+      </ActionContainer>
+    )
+  }
+
+  return (
+    <ActionContainer>
+      <button
+        title='regresar al lobby'
+        onClick={() => changeAppStatus(APP_STATUS.LOBBY)}
+      >
+        <ArrowLeft className='size-8 transition-colors duration-200 hover:text-slate-500' />
       </button>
     </ActionContainer>
   )
