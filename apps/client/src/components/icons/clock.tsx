@@ -9,14 +9,14 @@ export default function Clock ({ className, ...props }: ClockProps) {
       className={cn('size-6', className)}
       data-slot='icon'
       fill='none'
-      stroke-width='1.5'
+      strokeWidth='1.5'
       stroke='currentColor'
       viewBox='0 0 24 24'
       aria-hidden='true'
     >
       <path
-        stroke-linecap='round'
-        stroke-linejoin='round'
+        strokeLinecap='round'
+        strokeLinejoin='round'
         d='M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z'
       ></path>
     </svg>
