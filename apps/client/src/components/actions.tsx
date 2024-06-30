@@ -1,6 +1,7 @@
 import { APP_STATUS } from '../constants'
 import { cn } from '../libs/cn'
 import { useTestsStore } from '../store/tests'
+import { Button } from './buttons'
 import { ArrowLeft } from './icons/arrow'
 import ReloadIcon from './icons/reload'
 import XMark from './icons/x-mark'
@@ -42,6 +43,7 @@ export function LobbyActions () {
 export function GameActions () {
   const appStatus = useTestsStore(state => state.appStatus)
   const changeAppStatus = useTestsStore(state => state.changeAppStatus)
+  const resetGame = useTestsStore(state => state.resetGame)
 
   if (appStatus === APP_STATUS.GAME_STARTED) {
     return (
@@ -60,6 +62,9 @@ export function GameActions () {
         >
           <XMark className='size-8 transition-colors duration-200 hover:text-slate-500' />
         </button>
+        <Button onClick={resetGame} title='Reiniciar juego'>
+          Reiniciar
+        </Button>
       </ActionContainer>
     )
   }
