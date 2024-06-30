@@ -1,10 +1,11 @@
 import Background from './components/background'
 import Error from './components/error'
-import { GameOver, Game, GameResults } from './components/game'
+import { Game, GameOver, GameResults } from './components/game'
 import Hero from './components/hero'
 import Loading from './components/loading'
 import Lobby from './components/lobby'
 import Ready from './components/ready'
+import Socials from './components/socials'
 import { APP_STATUS } from './constants'
 import { useTestsStore } from './store/tests'
 
@@ -24,6 +25,8 @@ export default function App () {
         {appStatus === APP_STATUS.GAME_RESULTS && <GameResults />}
         {appStatus === APP_STATUS.ERROR && <Error />}
       </main>
+
+      <Socials />
     </>
   )
 }
