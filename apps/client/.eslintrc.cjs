@@ -27,6 +27,7 @@ module.exports = {
     'no-trailing-spaces': 'error',
     'eol-last': ['error', 'always'],
     'object-curly-spacing': ['error', 'always'],
-    'array-bracket-spacing': ['error', 'never']
+    'array-bracket-spacing': ['error', 'never'],
+    "tailwindcss/no-custom-classname": "off"
   },
 }

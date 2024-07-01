@@ -23,6 +23,9 @@ export default function Lobby () {
               onClick={createHandleClick(test.id)}
               className='group relative h-64 cursor-pointer overflow-hidden rounded-lg border border-gray-200 p-4 shadow-slate-900'
             >
+              <div className='animate-zoom-in absolute right-2 top-2 z-10 rounded-full bg-[#1d1d1d] px-2 py-1 text-sm text-white'>
+                <span className='truncate text-sm font-medium'>30</span>
+              </div>
               <img
                 src={test.imageUrl}
                 alt={`Imagen del examen ${test.name}`}
