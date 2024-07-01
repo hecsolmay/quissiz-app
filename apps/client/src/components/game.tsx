@@ -34,6 +34,11 @@ export function Game () {
       <GameActions />
       <GameContainer>
         <h1 className='text-pretty text-3xl font-bold'>{test.name}</h1>
+        <div className='w-full md:w-96'>
+          <p className='mt-2 text-end'>
+            Pregunta {currentQuestionIndex + 1} de {questions.length}
+          </p>
+        </div>
         <Questions>
           <div className='mt-4 inline-flex min-h-7 w-full justify-end'>
             {isUserAlreadyAnswered && unanswered === 0 && (
