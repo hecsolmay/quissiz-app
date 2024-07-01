@@ -32,6 +32,10 @@ export default function Questions ({ children }: QuestionsProps) {
       return 'bg-green-500'
     }
 
+    if (isUserAlreadyAnswered && !isCorrectAnswer && userSelectedOption < 0) {
+      return 'bg-red-500'
+    }
+
     return 'border border-gray-300 bg-white text-gray-800'
   }
 
